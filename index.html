@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#059669">
     <title>UroFlow Acoustic Analyzer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -27,83 +26,103 @@
         /* Reset and Base Styles */
         * {
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
             font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
-            background-color: #111827; /* Dark background for desktop presentation */
+            background-color: #111827; 
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            overflow: hidden; /* Prevent body scroll */
+            overflow: hidden; /* Prevent body scroll on mobile */
+            overscroll-behavior: none;
         }
 
-        /* Mobile Frame / App Container */
+        /* --- MAIN APP CONTAINER --- */
         #mobile-frame {
             background-color: var(--bg-color);
             position: relative;
             width: 100%;
-            max-width: 400px; /* Standard phone width constraint for desktop */
-            height: 90vh;
-            max-height: 850px;
-            overflow: hidden; /* Clip children */
+            height: 100vh; /* Fallback */
+            height: 100dvh; /* Dynamic viewport height for mobile */
+            overflow: hidden;
             display: flex;
-            flex-direction: column;
-            box-shadow: 0 0 0 12px #1f2937, 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            border-radius: 40px;
-            transform: translateZ(0); /* Hardware acceleration */
+            flex-direction: column; /* Stack Layout: Header -> Content -> Nav */
+            
+            /* Desktop Styling Defaults */
+            max-width: none;
+            max-height: none;
+            box-shadow: none;
+            border-radius: 0;
         }
-
-        /* Mobile Responsive Overrides */
-        @media (max-width: 480px) {
-            body {
-                background-color: var(--bg-color); /* Match app bg on mobile */
-            }
+        
+        /* Desktop/Tablet "Mockup" Mode Override */
+        @media (min-width: 450px) {
             #mobile-frame {
-                max-width: 100%;
-                height: 100vh; /* Fallback */
-                height: 100dvh; /* Dynamic Viewport Height covers address bar changes */
-                max-height: none;
-                border-radius: 0;
-                box-shadow: none;
+                max-width: 400px;
+                height: 90vh;
+                max-height: 850px;
+                box-shadow: 0 0 0 12px #1f2937, 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                border-radius: 40px;
             }
         }
 
+        /* --- HEADER --- */
         .header {
             background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
             color: white;
-            padding: 2.5rem 1.5rem 1.5rem 1.5rem;
-            padding-top: calc(2.5rem + env(safe-area-inset-top)); /* Handle notch */
-            border-radius: 0 0 32px 32px;
-            box-shadow: 0 10px 40px -10px rgba(5, 150, 105, 0.4);
+            padding: 1.5rem;
+            /* Handle Safe Area for Notch */
+            padding-top: calc(1.5rem + env(safe-area-inset-top)); 
+            
+            border-radius: 0 0 24px 24px;
+            box-shadow: 0 4px 20px -5px rgba(5, 150, 105, 0.4);
             z-index: 10;
-            flex-shrink: 0;
+            flex-shrink: 0; /* Prevent header shrinking */
             position: relative;
             overflow: hidden;
         }
-
-        /* On mobile, reduce header radius slightly */
-        @media (max-width: 480px) {
+        
+        /* Larger radius for desktop mockup */
+        @media (min-width: 450px) {
             .header {
-                border-radius: 0 0 24px 24px;
+                padding-top: 2.5rem;
+                border-radius: 0 0 32px 32px;
             }
         }
 
+        /* --- SCROLLABLE CONTENT --- */
         .content {
-            flex-grow: 1;
+            flex-grow: 1; /* Take up all available middle space */
             padding: 1.5rem;
-            overflow-y: auto; /* Internal scrolling only */
-            padding-bottom: calc(6rem + env(safe-area-inset-bottom)); /* Space for nav + home indicator */
+            overflow-y: auto; /* Scrollable */
             scrollbar-width: none;
-            -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
+            -webkit-overflow-scrolling: touch;
+            /* No padding-bottom needed here anymore due to flex layout */
         }
         .content::-webkit-scrollbar {
             display: none;
         }
 
+        /* --- BOTTOM NAVIGATION --- */
+        .bottom-nav {
+            background-color: white;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.75rem 0.5rem;
+            /* Handle Home Bar */
+            padding-bottom: calc(0.75rem + env(safe-area-inset-bottom)); 
+            
+            z-index: 20;
+            box-shadow: 0 -4px 15px -3px rgba(0, 0, 0, 0.05);
+            flex-shrink: 0; /* Prevent nav shrinking */
+        }
+
+        /* --- COMPONENTS --- */
         .card {
             background-color: var(--card-bg);
             border-radius: 16px;
@@ -182,21 +201,6 @@
             box-shadow: 0 0 0 2px var(--primary-color);
         }
 
-        /* Bottom Navigation */
-        .bottom-nav {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: white;
-            border-top: 1px solid #e5e7eb;
-            display: flex;
-            justify-content: space-around;
-            padding: 0.75rem 0.5rem 1.5rem 0.5rem;
-            padding-bottom: calc(1.5rem + env(safe-area-inset-bottom)); /* Handle home indicator */
-            z-index: 20;
-            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
         .nav-item {
             display: flex;
             flex-direction: column;
@@ -206,7 +210,7 @@
             background: none;
             border: none;
             flex: 1;
-            padding: 0.5rem 0.25rem;
+            padding: 0.25rem;
             gap: 4px;
             transition: color 0.2s;
             text-align: center;
@@ -307,25 +311,31 @@
             flex-shrink: 0;
         }
         
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #d1d5db;
-            transition: all 0.3s;
-        }
-        .dot.active {
-            background-color: var(--primary-color);
-            width: 24px;
-            border-radius: 8px;
+        #loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
 <div id="mobile-frame">
-    <!-- Header (Hidden during tutorial) -->
-    <div id="app-header" class="header flex justify-between items-center" style="display: none;">
+    <!-- Loading Screen (Safety Net) -->
+    <div id="loading-screen">Loading App...</div>
+
+    <!-- Header (Visible by default) -->
+    <div id="app-header" class="header flex justify-between items-center">
         <!-- Abstract Decorative Elements -->
         <div class="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
         <div class="absolute bottom-0 left-0 w-48 h-48 bg-black opacity-10 rounded-full blur-2xl translate-y-1/3 -translate-x-1/4 pointer-events-none"></div>
@@ -357,7 +367,7 @@
         </div>
     </div>
 
-    <!-- Main Content Area -->
+    <!-- Main Content Area (Flex Grow) -->
     <div id="app-content" class="content">
         <!-- Injected via JS -->
     </div>
@@ -378,8 +388,8 @@
         </div>
     </div>
 
-    <!-- Bottom Navigation (Hidden during tutorial) -->
-    <div id="app-nav" class="bottom-nav" style="display: none;">
+    <!-- Bottom Navigation (Visible by default) -->
+    <div id="app-nav" class="bottom-nav">
         <button onclick="goToHomeTab()" class="nav-item active" id="nav-home">
             <i data-lucide="home" class="w-6 h-6"></i>
             <span id="label-home">Home</span>
@@ -561,16 +571,7 @@
             recent_records: "हाल के रिकॉर्ड",
             export_all: "सभी निर्यात",
             no_records: "कोई रिकॉर्ड नहीं मिला।",
-            daily_summary: "दैनिक सारांश",
-            intake: "सेवन",
-            output: "उत्पादन",
-            log_intake: "सेवन दर्ज करें",
-            log_output: "उत्पादन दर्ज करें",
-            urgency: "तत्कालता",
-            leakage: "रिसाव",
-            none: "कोई नहीं",
-            mild: "हल्का",
-            severe: "गंभीर",
+            daily_intake: "दैनिक जल सेवन",
             quick_log: "त्वरित लॉग",
             todays_logs: "आज के लॉग",
             understanding_flow: "प्रवाह को समझें",
@@ -777,16 +778,15 @@
     ];
 
     // Mock Database for History
-    // Added IPSS score to mock data
     let historyData = [
         { 
-            id: 101, date: "2023-10-24", time: "08:30 AM", 
+            id: 101, date: "2025-10-24", time: "08:30 AM", 
             qMax: 14.5, qAve: 8.2, volume: 310, voidTime: 38, 
             flowTime: 36, timeToMax: 12, hesitancy: 2, ipss: 5,
             rating: "Normal", aiSummary: "Flow consistent with age." 
         },
         { 
-            id: 102, date: "2023-10-26", time: "06:15 PM", 
+            id: 102, date: "2025-10-26", time: "06:15 PM", 
             qMax: 12.1, qAve: 6.5, volume: 280, voidTime: 43, 
             flowTime: 41, timeToMax: 18, hesitancy: 4, ipss: 12,
             rating: "Slightly Reduced", aiSummary: "Slightly lower peak flow observed." 
@@ -957,7 +957,11 @@
 
     window.endTutorial = () => {
         // Go to profile setup ("edit-profile" mode for first setup)
-        localStorage.setItem('seenTutorial', 'true');
+        try {
+            localStorage.setItem('seenTutorial', 'true');
+        } catch(e) {
+            console.log("LocalStorage denied");
+        }
         appHeader.style.display = 'flex';
         appNav.style.display = 'flex';
         currentPage = 'edit-profile'; 
@@ -1640,33 +1644,197 @@ AI Summary: ${currentAnalysis.aiSummary}
 
     // New Begin Recording -> Go to Recording Screen (Simulation)
     window.beginRecording = () => {
-        currentPage = 'recording';
-        renderHome();
+        if (!audioContext || audioContext.state === 'closed') {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        // Request mic access
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(stream => {
+                microphoneStream = stream;
+                // Set up audio graph
+                const source = audioContext.createMediaStreamSource(stream);
+                gainNode = audioContext.createGain();
+                gainNode.gain.value = 5.0; 
+                filterNode = audioContext.createBiquadFilter();
+                filterNode.type = 'bandpass';
+                filterNode.frequency.value = SPLASH_FREQ_CENTER;
+                filterNode.Q.value = SPLASH_FREQ_Q;
+                analyser = audioContext.createAnalyser();
+                analyser.fftSize = 512;
+                audioDataArray = new Uint8Array(analyser.frequencyBinCount);
+
+                source.connect(gainNode);
+                gainNode.connect(filterNode);
+                filterNode.connect(analyser);
+
+                isRecording = true;
+                recordingStartTime = Date.now();
+                recordingData = [];
+                currentPage = 'recording';
+                renderHome();
+                analyzeAudioLoop();
+            })
+            .catch(err => {
+                console.error('Error accessing microphone:', err);
+                currentPage = 'mic-error';
+                renderHome();
+            });
     };
 
-    // Reverted to Simulation Logic for Stop Test
-    window.stopTest = () => {
-        // Generate simulated data points for analysis
-        const randomQmax = (Math.random() * (22 - 10) + 10).toFixed(1);
-        const randomVol = Math.floor(Math.random() * (450 - 200) + 200);
-        const calcVoidTime = Math.floor(randomVol / (randomQmax * 0.6));
+    function analyzeAudioLoop() {
+        if (!isRecording) return;
+
+        animationFrameId = requestAnimationFrame(analyzeAudioLoop);
+
+        if (!analyser) return;
+
+        analyser.getByteTimeDomainData(audioDataArray);
+
+        let sum = 0;
+        for (let i = 0; i < audioDataArray.length; i++) {
+            const x = (audioDataArray[i] - 128) / 128.0; 
+            sum += x * x;
+        }
+        let rms = Math.sqrt(sum / audioDataArray.length);
         
-        const calcFlowTime = Math.floor(calcVoidTime * 0.9);
-        const calcTimeToMax = Math.floor(calcVoidTime * 0.3);
-        const calcHesitancy = Math.floor(Math.random() * 5 + 1);
-        const calcIPSS = Math.floor(Math.random() * 35); // Random IPSS score 0-35
+        if(rms < MIN_RMS_THRESHOLD) rms = 0;
+
+        const elapsedTime = (Date.now() - recordingStartTime) / 1000;
+        recordingData.push({ time: elapsedTime, rms: rms });
+
+        drawVisualizer(audioDataArray);
+    }
+    
+    function drawVisualizer(dataArray) {
+        const canvas = document.getElementById('recording-visualizer');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = 'rgb(249, 250, 251)'; 
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#059669'; 
+        ctx.beginPath();
+
+        const sliceWidth = width * 1.0 / dataArray.length;
+        let x = 0;
+
+        for (let i = 0; i < dataArray.length; i++) {
+            const v = dataArray[i] / 128.0;
+            const y = v * height / 2;
+
+            if (i === 0) {
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+            }
+
+            x += sliceWidth;
+        }
+
+        ctx.lineTo(canvas.width, canvas.height / 2);
+        ctx.stroke();
+    }
+    
+    function startAudioVisualization() {
+        // No-op
+    }
+
+
+    window.stopTest = () => {
+        isRecording = false;
+        if (audioContext) {
+            audioContext.close();
+        }
+        if (microphoneStream) {
+            microphoneStream.getTracks().forEach(track => track.stop());
+        }
+        cancelAnimationFrame(animationFrameId);
+
+        // --- Post-Processing ---
+        
+        // 1. Moving Average Smoothing
+        const smoothedRMS = [];
+        const windowSize = 15; 
+        for (let i = 0; i < recordingData.length; i++) {
+            let sum = 0;
+            let count = 0;
+            for (let j = Math.max(0, i - windowSize); j <= Math.min(recordingData.length - 1, i + windowSize); j++) {
+                sum += recordingData[j].rms;
+                count++;
+            }
+            smoothedRMS.push(sum / count);
+        }
+
+        // 2. Generate Flow Profile
+        const flowProfile = recordingData.map((point, index) => {
+            const rms = smoothedRMS[index];
+            let flow = 0;
+            if (rms > MIN_RMS_THRESHOLD) {
+                flow = FLOW_COEFFICIENT * Math.pow(rms, FLOW_EXPONENT);
+            }
+            flow = Math.min(flow, 50); 
+            return { x: point.time, y: flow };
+        });
+
+        // 3. Calculate Metrics
+        let maxFlow = 0;
+        let totalVolume = 0;
+        let flowSum = 0;
+        let flowCount = 0;
+        let startTime = 0;
+        let endTime = 0;
+        let hasStarted = false;
+
+        for (let i = 1; i < flowProfile.length; i++) {
+            const dt = flowProfile[i].x - flowProfile[i-1].x;
+            const flow = flowProfile[i].y;
+            
+            if (flow > 1.0) { 
+                if (!hasStarted) {
+                    startTime = flowProfile[i].x;
+                    hasStarted = true;
+                }
+                endTime = flowProfile[i].x;
+                
+                totalVolume += flow * dt;
+                flowSum += flow;
+                flowCount++;
+                if (flow > maxFlow) maxFlow = flow;
+            }
+        }
+
+        const voidTime = hasStarted ? (endTime - startTime) : 0;
+        const avgFlow = flowCount > 0 ? (flowSum / flowCount) : 0;
+        const hesitancy = hasStarted ? startTime : 0;
+        
+        let timeToMax = 0;
+        if(hasStarted) {
+             const maxFlowPoint = flowProfile.find(p => p.y === maxFlow);
+             if(maxFlowPoint) timeToMax = maxFlowPoint.x - startTime;
+        }
+
+        const calcIPSS = Math.floor(Math.random() * 35); // Mocked IPSS for now
 
         currentAnalysis = {
-            qMax: parseFloat(randomQmax),
-            qAve: (randomQmax * 0.6).toFixed(1),
-            volume: randomVol,
-            voidTime: calcVoidTime,
-            flowTime: calcFlowTime,
-            timeToMax: calcTimeToMax,
-            hesitancy: calcHesitancy,
+            qMax: parseFloat(maxFlow.toFixed(1)),
+            qAve: parseFloat(avgFlow.toFixed(1)),
+            volume: Math.round(totalVolume),
+            voidTime: Math.round(voidTime),
+            flowTime: Math.round(voidTime),
+            timeToMax: parseFloat(timeToMax.toFixed(1)),
+            hesitancy: parseFloat(hesitancy.toFixed(1)),
             ipss: calcIPSS,
-            aiSummary: "Analyzing simulated audio pattern...",
-            graphPoints: [] // Let drawGraph generate the simulated curve
+            aiSummary: "Analyzing recorded audio pattern...",
+            graphPoints: flowProfile 
         };
 
         const now = new Date();
@@ -1814,16 +1982,29 @@ AI Summary: ${currentAnalysis.aiSummary}
             ctx.stroke();
         }
     }
-    
-    // --- Audio Visualization Logic (Placeholder for simulation) ---
-    function startAudioVisualization() {
-        // ... (visualization code preserved from previous artifact) ...
-    }
 
     // --- Init ---
     document.addEventListener('DOMContentLoaded', () => {
-        // Always show tutorial on reload
-        renderTutorial();
+        // Check local storage for tutorial status (mock)
+        try {
+            const seenTutorial = localStorage.getItem('seenTutorial');
+            if (seenTutorial) {
+                // Ensure shell is visible for returning users
+                appHeader.style.display = 'flex';
+                appNav.style.display = 'flex';
+                
+                currentPage = 'onboarding'; // Main Dashboard
+                renderHome();
+            } else {
+                renderTutorial();
+            }
+        } catch(e) {
+            renderTutorial();
+        }
+        
+        // Remove loading screen
+        const loadingScreen = document.getElementById('loading-screen');
+        if(loadingScreen) loadingScreen.style.display = 'none';
     });
 
 </script>
