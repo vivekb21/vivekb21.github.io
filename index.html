@@ -28,17 +28,23 @@
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
+        
+        /* FIX: Ensure HTML and Body take up full space without unwanted margin */
+        html, body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            overscroll-behavior: none;
+        }
 
         body {
             font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
             background-color: #111827; 
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* FIX: Align to top to prevent centralizing blank space */
             min-height: 100vh;
-            margin: 0;
             overflow: hidden; /* Prevent body scroll on mobile */
-            overscroll-behavior: none;
         }
 
         /* --- MAIN APP CONTAINER --- */
@@ -67,6 +73,7 @@
                 max-height: 850px;
                 box-shadow: 0 0 0 12px #1f2937, 0 25px 50px -12px rgba(0, 0, 0, 0.5);
                 border-radius: 40px;
+                align-self: center; /* Center vertically only in mockup view */
             }
         }
 
@@ -818,7 +825,7 @@
             tut_1_title: "UroFlow मध्ये स्वागत आहे",
             tut_1_desc: "आपल्या स्मार्टफोनवरून प्रगत ध्वनिक विश्लेषण तंत्रज्ञानाचा वापर करून आपल्या मूत्र आरोग्याचे निरीक्षण करा.",
             tut_2_title: "हे कसे कार्य करते",
-            tut_2_desc: "अॅप प्रवाह दर आणि प्रमाण अंदाज करण्यासाठी आपल्या लघवी प्रवाहाचा आवाज ऐकतो.",
+            tut_2_desc: "अॅप प्रवाह दर आणि प्रमाण अंदाज करण्यासाठी आपल्या लघवी प्रवाहाचा आवाज ऐकतो。",
             tut_3_title: "गोपनीयता प्रथम",
             tut_3_desc: "आपले रेकॉर्डिंग आपल्या डिव्हाइसवर स्थानिक पातळीवर प्रक्रिया केली जाते.",
             next: "पुढे",
@@ -828,9 +835,9 @@
             ipss_mild: "सौम्य लक्षणे",
             ipss_moderate: "मध्यम लक्षणे",
             ipss_severe: "गंभीर लक्षणे",
-            ipss_desc_mild: "आपली लक्षणे सौम्य आहेत. साधारणपणे, उपचारांची आवश्यकता नसते.",
-            ipss_desc_mod: "आपली लक्षणे मध्यम आहेत. व्यवस्थापनासाठी डॉक्टरांचा सल्ला घ्या.",
-            ipss_desc_sev: "आपली लक्षणे गंभीर आहेत. यूरोलॉजिस्टला भेटणे शिफारस केलेले आहे.",
+            ipss_desc_mild: "आपली लक्षणे सौम्य आहेत. साधारणपणे, उपचारांची आवश्यकता नसते。",
+            ipss_desc_mod: "आपली लक्षणे मध्यम आहेत. व्यवस्थापनासाठी डॉक्टरांचा सल्ला घ्या。",
+            ipss_desc_sev: "आपली लक्षणे गंभीर आहेत. यूरोलॉजिस्टला भेटणे शिफारस केलेले आहे。",
             
             // IPSS Marathi
             ipss_q1: "अपूर्ण रिकामे होणे",
