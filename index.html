@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>UroFlow Acoustic Analyzer</title>
+    <title>UroSonic Acoustic Analyzer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -556,7 +556,7 @@
             drink_type: "Drink Type",
             amount_ml: "Amount (ml)",
             // Tutorial
-            tut_1_title: "Welcome to UroFlow",
+            tut_1_title: "Welcome to UroSonic",
             tut_1_desc: "Monitor your urinary health using advanced acoustic analysis technology right from your smartphone.",
             tut_2_title: "How it Works",
             tut_2_desc: "The app listens to the sound of your urine flow to estimate flow rate, volume, and other clinical metrics.",
@@ -689,7 +689,7 @@
             add_entry: "प्रविष्टि जोड़ें",
             drink_type: "पेय प्रकार",
             amount_ml: "मात्रा (ml)",
-            tut_1_title: "UroFlow में स्वागत है",
+            tut_1_title: "UroSonic में स्वागत है",
             tut_1_desc: "सीधे अपने स्मार्टफोन से उन्नत ध्वनिक विश्लेषण तकनीक का उपयोग करके अपने मूत्र स्वास्थ्य की निगरानी करें।",
             tut_2_title: "यह कैसे काम करता है",
             tut_2_desc: "ऐप प्रवाह दर और मात्रा का अनुमान लगाने के लिए आपके मूत्र प्रवाह की आवाज़ सुनता है।",
@@ -822,7 +822,7 @@
             add_entry: "नोंद जोडा",
             drink_type: "पेय प्रकार",
             amount_ml: "प्रमाण (ml)",
-            tut_1_title: "UroFlow मध्ये स्वागत आहे",
+            tut_1_title: "UroSonic मध्ये स्वागत आहे",
             tut_1_desc: "आपल्या स्मार्टफोनवरून प्रगत ध्वनिक विश्लेषण तंत्रज्ञानाचा वापर करून आपल्या मूत्र आरोग्याचे निरीक्षण करा.",
             tut_2_title: "हे कसे कार्य करते",
             tut_2_desc: "अॅप प्रवाह दर आणि प्रमाण अंदाज करण्यासाठी आपल्या लघवी प्रवाहाचा आवाज ऐकतो。",
@@ -1582,7 +1582,7 @@
     // --- Share Logic ---
     window.shareReport = async () => {
         const text = `
-UroFlow Analysis Report for ${userProfile.name}
+UroSonic Analysis Report for ${userProfile.name}
 Date: ${new Date().toLocaleDateString()}
 
 Max Flow (Qmax): ${currentAnalysis.qMax} ml/s
@@ -2073,3 +2073,4 @@ AI Summary: ${currentAnalysis.aiSummary}
 </script>
 </body>
 </html>
+
