@@ -460,8 +460,10 @@
     const DAILY_WATER_GOAL = 2500; 
 
     // --- Audio Analysis Config ---
-    const SPLASH_FREQ_CENTER = 1000; 
-    const SPLASH_FREQ_Q = 0.7; 
+    //const SPLASH_FREQ_CENTER = 1000; 
+    //const SPLASH_FREQ_Q = 0.7;
+    const HP_FREQ = 300;     // High-pass cutoff frequency
+const LP_FREQ = 3000;    // Low-pass cutoff frequency
     const MIN_RMS_THRESHOLD = 0.004; 
     const FLOW_COEFFICIENT = 60; 
     const FLOW_EXPONENT = 0.5;
@@ -921,7 +923,9 @@
     let audioContext = null;
     let microphoneStream = null; 
     let analyser = null;
-    let filterNode = null; 
+    //let filterNode = null; 
+    let highpassFilter = null; 
+let lowpassFilter = null;
     let gainNode = null; 
     let audioDataArray = null;
     let isRecording = false;
@@ -1358,19 +1362,41 @@
             .then(stream => {
                 microphoneStream = stream;
                 const source = audioContext.createMediaStreamSource(stream);
-                gainNode = audioContext.createGain();
-                gainNode.gain.value = 6.0; 
-                filterNode = audioContext.createBiquadFilter();
-                filterNode.type = 'bandpass';
-                filterNode.frequency.value = SPLASH_FREQ_CENTER;
-                filterNode.Q.value = SPLASH_FREQ_Q;
-                analyser = audioContext.createAnalyser();
-                analyser.fftSize = 512;
-                audioDataArray = new Uint8Array(analyser.frequencyBinCount);
+                //gainNode = audioContext.createGain();
+                //gainNode.gain.value = 6.0; 
+                //filterNode = audioContext.createBiquadFilter();
+                //filterNode.type = 'bandpass';
+                //filterNode.frequency.value = SPLASH_FREQ_CENTER;
+                //filterNode.Q.value = SPLASH_FREQ_Q;
+                //analyser = audioContext.createAnalyser();
+                //analyser.fftSize = 512;
+                //audioDataArray = new Uint8Array(analyser.frequencyBinCount);
 
-                source.connect(gainNode);
-                gainNode.connect(filterNode);
-                filterNode.connect(analyser);
+                //source.connect(gainNode);
+                //gainNode.connect(filterNode);
+                //filterNode.connect(analyser);
+                gainNode = audioContext.createGain();
+gainNode.gain.value = 6.0; 
+
+// 1. Create High-Pass Filter (removes rumble below 300Hz)
+highpassFilter = audioContext.createBiquadFilter();
+highpassFilter.type = 'highpass';
+highpassFilter.frequency.value = HP_FREQ; // 300 Hz
+
+// 2. Create Low-Pass Filter (removes hiss above 3000Hz)
+lowpassFilter = audioContext.createBiquadFilter();
+lowpassFilter.type = 'lowpass';
+lowpassFilter.frequency.value = LP_FREQ; // 3000 Hz
+
+analyser = audioContext.createAnalyser();
+analyser.fftSize = 512;
+audioDataArray = new Uint8Array(analyser.frequencyBinCount);
+
+// 3. Connect Graph: Source -> Gain -> HighPass -> LowPass -> Analyser
+source.connect(gainNode);
+gainNode.connect(highpassFilter);
+highpassFilter.connect(lowpassFilter);
+lowpassFilter.connect(analyser);
 
                 isRecording = true;
                 recordingStartTime = Date.now();
@@ -2102,5 +2128,6 @@ AI Summary: ${currentAnalysis.aiSummary}
 </script>
 </body>
 </html>
+
 
 
