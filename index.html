@@ -462,7 +462,7 @@
     // --- Audio Analysis Config ---
     const SPLASH_FREQ_CENTER = 1000; 
     const SPLASH_FREQ_Q = 0.7; 
-    const MIN_RMS_THRESHOLD = 0.005; 
+    const MIN_RMS_THRESHOLD = 0.004; 
     const FLOW_COEFFICIENT = 60; 
     const FLOW_EXPONENT = 0.5;
 
@@ -1359,7 +1359,7 @@
                 microphoneStream = stream;
                 const source = audioContext.createMediaStreamSource(stream);
                 gainNode = audioContext.createGain();
-                gainNode.gain.value = 5.0; 
+                gainNode.gain.value = 6.0; 
                 filterNode = audioContext.createBiquadFilter();
                 filterNode.type = 'bandpass';
                 filterNode.frequency.value = SPLASH_FREQ_CENTER;
@@ -2102,4 +2102,5 @@ AI Summary: ${currentAnalysis.aiSummary}
 </script>
 </body>
 </html>
+
 
