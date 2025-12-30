@@ -816,7 +816,7 @@ const LP_FREQ = 3000;    // Low-pass cutoff frequency
             prep_header: "तयारी",
             instr_dist: "फोन टॉयलेटपासून अंदाजे 15-20 सेमी अंतरावर ठेवा.",
             instr_quiet: "खोली शांत असल्याची खात्री करा. पंखे बंद करा.",
-            instr_void: "लघवी सुरू करण्यापूर्वी 'रेकॉर्डिंग सुरू करा' दाबा.",
+            instr_void: "लघवी सुरू करण्यापूर्वी 'रेकॉर्डिंग शुरू करा' दाबा.",
             start_recording: "रेकॉर्डिंग सुरू करा",
             add_entry: "नोंद जोडा",
             drink_type: "पेय प्रकार",
@@ -1750,8 +1750,8 @@ AI Summary: ${currentAnalysis.aiSummary}
                         </button>
                     </div>
 
-                                        <div class="grid grid-cols-2 gap-4 mb-6">
-                                                <div class="card p-4 flex flex-col justify-between h-32 relative overflow-hidden group">
+                                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                                <div onclick="switchTab('history')" class="card p-4 flex flex-col justify-between h-32 relative overflow-hidden group cursor-pointer hover:shadow-md transition">
                             <div class="absolute right-[-10px] top-[-10px] bg-emerald-100 w-16 h-16 rounded-full opacity-50"></div>
                             <div>
                                 <span class="text-xs font-bold text-emerald-500 uppercase tracking-wider">Last Void</span>
@@ -1760,7 +1760,7 @@ AI Summary: ${currentAnalysis.aiSummary}
                             <div class="text-xs text-gray-400">Vol: ${lastRecord.volume}ml</div>
                         </div>
 
-                                                <div class="card p-4 flex flex-col justify-between h-32 relative overflow-hidden">
+                                                                <div onclick="switchTab('diary')" class="card p-4 flex flex-col justify-between h-32 relative overflow-hidden cursor-pointer hover:shadow-md transition">
                             <div class="absolute right-[-10px] top-[-10px] bg-blue-100 w-16 h-16 rounded-full opacity-50"></div>
                             <div>
                                 <span class="text-xs font-bold text-blue-500 uppercase tracking-wider">Hydration</span>
@@ -1771,7 +1771,7 @@ AI Summary: ${currentAnalysis.aiSummary}
                             </div>
                         </div>
 
-                                                <div onclick="showIPSSInfo(${userProfile.ipss || 0})" class="card p-4 flex flex-col justify-between h-32 relative overflow-hidden col-span-2 bg-gradient-to-r from-white to-gray-50 cursor-pointer hover:shadow-md transition">
+                                                                <div onclick="showIPSSInfo(${userProfile.ipss || 0})" class="card p-4 flex flex-col justify-between h-32 relative overflow-hidden col-span-2 bg-gradient-to-r from-white to-gray-50 cursor-pointer hover:shadow-md transition">
                             <div class="absolute right-[-10px] top-[-10px] bg-purple-100 w-16 h-16 rounded-full opacity-50"></div>
                             <div class="flex justify-between items-start relative z-10">
                                 <div>
@@ -1784,7 +1784,7 @@ AI Summary: ${currentAnalysis.aiSummary}
                         </div>
                     </div>
 
-                                            <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex justify-between items-center">
+                                                    <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex justify-between items-center">
                         <div class="flex items-center gap-3">
                             <div class="bg-emerald-50 p-2 rounded-full">
                                 <i data-lucide="user" class="w-5 h-5 text-emerald-600"></i>
@@ -2126,7 +2126,3 @@ AI Summary: ${currentAnalysis.aiSummary}
 </script>
 </body>
 </html>
-
-
-
-
